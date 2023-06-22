@@ -1,0 +1,43 @@
+﻿@model PagedList.IPagedList<OnTapKiemTra2.Models.Product>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Danh sách sản phẩm</h2>
+
+@using(Html.BeginForm())
+ {
+    <p>
+        Tên mặt hàng: @Html.TextBox("Seachstring")
+        <input type="submit" value="Tìm"/>
+    </p>
+ }
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-6 col-lg-3 col-md-4 table-bordered text-center">
+            Mã sản phẩm: <b>@Html.DisplayFor(modelItem => item.Categoryid)</b> <br />
+            Tên sản phẩm: <b>@Html.DisplayFor(modelItem => item.ProdName)</b> <br />
+            Mô tả: <b>@Html.DisplayFor(modelItem => item.Description)</b> <br />
+            @{
+                var path = "~/Images/" + item.ImagePath;
+                <img src="@Url.Content(path)" width="150px"/>
+            }
+            <br />
+            Giá tiền: <b>@Html.DisplayFor(modelItem => item.Price)</b> <br />
+            @Html.ActionLink("Edit", "Edit", new { id = item.Pid })
+            @Html.ActionLink("Details", "Details", new { id = item.Pid })
+        </div>  
+    }
+</div>
+
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new {page}))
